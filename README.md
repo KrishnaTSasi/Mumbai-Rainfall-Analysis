@@ -142,8 +142,7 @@ plt.xlabel('Month')
 plt.ylabel('Rainfall(mm)')
 plt.show()
 
-** Highest Rainfall: 944 mm
-Month: July **
+** Highest Rainfall: 944 mm, Month: July **
 
 import seaborn as sns
 import pandas as pd
@@ -164,7 +163,9 @@ data['Pre_Monsoon']=data[['Mar','April','May']].sum(axis=1)
 data['Monsoon']=data[['June','July','Aug','Sept']].sum(axis=1)
 data['Post_Monsoon']=data[['Oct','Nov','Dec']].sum(axis=1)
 data['Winter']=data[['Jan','Feb']].sum(axis=1)
+
 seasons=['Pre_Monsoon','Monsoon','Post_Monsoon','Winter']
+
 for season in seasons:
   plt.plot(data['Year'],data[season],marker='o',label=season)
 plt.title('Seasonal Rainfall in Mumbai')
@@ -173,17 +174,16 @@ plt.ylabel('Rainfall(mm)')
 plt.legend()
 plt.show()
 
-
-**Monsoon season (June–September) receives the highest rainfall.**
-
-**Post Monsoon season (March, April, May) is receiving the second highest rainfall.**
+**Monsoon season (June–September) receives the highest rainfall. Post Monsoon season (March, April, May) is receiving the second highest rainfall.**
 
 # Seasonal rainfall
 data['Pre_Monsoon']=data[['Mar','April','May']].sum(axis=1)
 data['Monsoon']=data[['June','July','Aug','Sept']].sum(axis=1)
 data['Post_Monsoon']=data[['Oct','Nov','Dec']].sum(axis=1)
 data['Winter']=data[['Jan','Feb']].sum(axis=1)
+
 seasons=['Pre_Monsoon']#,'Monsoon','Post_Monsoon','Winter']
+
 for season in seasons:
   plt.plot(data['Year'],data[season],marker='o',label=season)
 plt.title('Seasonal Rainfall in Mumbai')
@@ -192,8 +192,7 @@ plt.ylabel('Rainfall(mm)')
 plt.legend()
 plt.show()
 
-**Highest Rainfall: 944 mm
-Year: 2005**
+**Highest Rainfall: 944 mm ,Year: 2005**
 
 import matplotlib.pyplot a plt
 from statsmodels.tsa.seasonal import seasonal_decompose
@@ -201,10 +200,10 @@ result=seasonal_decompose(data['Total'],model='additive',period=12)
 result.plot()
 plt.show()
 
-*8Additive: seasonal fluctuations and trend are roughly constant over time.
-Trend: Long-term increase or decrease.
-Seasonal: Regular repeating patterns.
-Residual: Remaining noise.**
+**Additive: seasonal fluctuations and trend are roughly constant over time.**
+**Trend: Long-term increase or decrease.**
+**Seasonal: Regular repeating patterns.**
+**Residual: Remaining noise.**
 
 *Check the stationary.**
 
@@ -216,8 +215,7 @@ print("ADF statistics:",adf_result[0])
 print("p_value:",adf_result[1])
 
 
-**p_value is less than hypothesis. so we reject the hypothesis.
-i.e a Stationary**
+**p_value is less than hypothesis. so we reject the hypothesis.i.e a Stationary**
 
 **KPSS Test**
 
@@ -243,22 +241,19 @@ i.e a white noise.**
 
 **White noise, it suggests there are no significant trends (e.g., increasing or decreasing rainfall over time) or seasonal patterns (e.g., predictable monsoon behavior).**
 
+** Ljung-Box test
+
 from statsmodels.stats.diagnostic import acorr_ljungbox
 lb_test=acorr_ljungbox(data['Total'], lags=[10], return_df=True)
 print(lb_test)
 
-**p-value > 0.05: Fail to reject
-𝐻
-0
-
- . i.e  white noise.**
-
+**p-value > 0.05: Fail to reject 𝐻0. i.e  white noise.**
 
 from statsmodels.stats.diagnostic import acorr_ljungbox
 lb_test=acorr_ljungbox(data['Total'],lags=[10],boxpierce=True)
 print(lb_test)
 
-
+**Q-Q Plot**
 
 import matplotlib.pyplot as plt
 from statsmodels.graphics.gofplots import qqplot
@@ -266,9 +261,7 @@ qqplot(data['Total'],line='s')
 plt.title("Q-Q plot")
 plt.show()
 
-**points lie close to red line, that data is approximately normally distributed .
-Mean:close to 0, as the middle points align well with line.
-Variance: Mostly constant in center, but deviations  non-constant variance.**
+**Points lie close to red line, that data is approximately normally distributed . Mean:close to 0, as the middle points align well with line.Variance: Mostly constant in center, but deviations  non-constant variance.**
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -280,19 +273,9 @@ plt.xlabel("Rainfall(mm)")
 plt.ylabel("Frequency")
 plt.show()
 
-**result.resid :- difference between the predicted and actual values.
-KDE- Kernel Density Estimation, a smooth curve showing distribution of data, like a histogram but continuous.
-Normal Distribution: A bell-shaped histogram.
-Skewness/Kurtosis: *Skewed or heavy-tailed histograms.
-                   *Right Skew (positively skewed): right tail of histogram is longer.
-                   *Left Skew (negatively skewed): left tail is longer.
-^residuals  to be skewed right (positively skewed), indicating the errors are not symmetrically distributed around zero.**                 
+**Residuals  to be skewed right (positively skewed), indicating the errors are not symmetrically distributed around zero.**                 
 
-**Most of the data points cluster around the mean.
-
-The distribution is symmetric.
-
-Extreme values (very high or very low rainfall) are rare.**
+**Most of the data points cluster around the mean. The distribution is symmetric. Extreme values (very high or very low rainfall) are rare.**
 
 **Shapiro Wilk test**
 
@@ -301,17 +284,11 @@ stat,p_value=shapiro(data['Total'])
 print(f"Test statistic:{stat}")
 print(f"p_value:{p_value}")
 
-**Test Statistic: 0.9825 ( 1, data is normal).
-P-value: 0.1191 (> 0.05).
- i.e, data is normally distributed & cannot be rejected.
+**Test Statistic: 0.9825 ( 1, data is normal).P-value: 0.1191 (> 0.05). i.e, data is normally distributed & cannot be rejected. The Mumbai rainfall data is likely normally distributed.**
 
-The Mumbai rainfall data is likely normally distributed.
+**Data is Gaussian: The mean is zero (stable) and variance is constant. Q-Q plots, histograms, and statistical tests (e.g., Shapiro-Wilk test) confirmed.**
 
-data is Gaussian:
-The mean is zero (stable) and variance is constant.
-Q-Q plots, histograms, and statistical tests (e.g., Shapiro-Wilk test) confirmed.
-
-Data is white noise and normally distributed, it suggests that Mumbai’s rainfall over 121 years is random and stable, with no significant trends or patterns.**
+**Data is white noise and normally distributed, it suggests that Mumbai’s rainfall over 121 years is random and stable, with no significant trends or patterns.**
 
 
  🧠 **10. Insights & Conclusions**
